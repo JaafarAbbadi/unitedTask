@@ -22,7 +22,7 @@ export class MenuEffects {
         private actions$: Actions,
         private httpClient: HttpClient
     ) {}
-    getCountryProducts$ = createEffect(() => this.actions$.pipe(
+    loadCountryProducts$ = createEffect(() => this.actions$.pipe(
         ofType(actions.loadCountryProducts),
         mergeMap(a => this.httpClient.get(environment.url + 'home?country_id=' + a.countryIdentifier, this.httpOptions)),
         map(d => actions.loadCountryProductsSuccess({countryProducts: d as CountryProducts})),

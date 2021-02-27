@@ -22,3 +22,8 @@ export const changeLanguage = createAction(
 export const changeLanguageSuccess = createAction(
     '[Base] Change Language Success',
 );
+
+export const changeCountry = createAction(
+    '[Base] Change Country',
+    props<{countryIdentifier: string}>()
+); // its success is loading its products

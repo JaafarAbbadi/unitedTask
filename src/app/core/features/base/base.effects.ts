@@ -41,4 +41,19 @@ export class BaseEffects {
         }),
         map(d => actions.initSuccess({data: d}))
     ));
+    changeCountry$ = createEffect(() => this.actions$.pipe(
+        ofType(actions.changeCountry),
+        mergeMap(action => this.httpClient.get(environment.url + 'initialize', this.httpOptions).pipe(
+            map(data => {
+                const i: Init = data as Init;
+                i.settings.default_language = this.is.defaultLanguage;
+                return {d: i , a: action};
+            })
+        )),
+        map(payload => {
+            payload.d.default_country = payload.d.countries.find(c => c.country_id === payload.a.countryIdentifier);
+            return payload.d;
+        }),
+        map(d => actions.initSuccess({data: d}))
+    ));
 }

@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { skip } from 'rxjs/operators';
 import { init } from '../features/base/base.actions';
 import { selectInitData } from '../features/base/base.selectors';
+import { loadCountryProducts } from '../features/menu/menu.actions';
+import { Country, Init } from '../models/init.model';
 /*
   this service subscribes to the init object in the store.
   then it generates the right values based on business default preferences
@@ -13,7 +16,7 @@ import { selectInitData } from '../features/base/base.selectors';
 })
 export class InitService {
   sub: Subscription;
-
+  init: Init;
   /* business theming */
   public primaryColor: string;
   public secondaryColor: string;
@@ -29,6 +32,8 @@ export class InitService {
   /* business preferences */
   public defaultLanguage: string;
   public selectedCountry: string; // init.default.country_id
+  public defaultCountry: Country;
+  public countries: Country[];
   public termsOn: boolean;
   public returnPolicyOn: boolean;
   public shippingPolicyOn: boolean;
@@ -96,8 +101,9 @@ export class InitService {
   }
 
   initSubscription(){
-    this.sub = this.store.select(selectInitData).subscribe(i => {
+    this.sub = this.store.select(selectInitData).pipe(skip(1)).subscribe(i => {
       // business theme
+      this.init = i;
       this.primaryColor = i?.settings.primary_color;
       this.secondaryColor = i?.settings.header_color;
       this.tertiaryColor = i?.settings.icon_color;
@@ -114,7 +120,10 @@ export class InitService {
       this.productsView = i?.settings.products_view;
       // Business Preferences
       this.defaultLanguage = i?.settings.default_language;
+      this.countries = i?.countries;
       this.selectedCountry = i?.default_country.country_id;
+      this.defaultCountry = i?.default_country;
+      this.store.dispatch(loadCountryProducts({countryIdentifier: this.defaultCountry?.country_id}));
       this.termsOn = i?.settings.terms_on === '1';
       this.returnPolicyOn = i?.settings.return_policy_on === '1';
       this.shippingPolicyOn = i?.settings.shipping_policy_on === '1';
