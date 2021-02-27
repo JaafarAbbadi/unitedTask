@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Init } from '../../models/init.model';
 import { of } from 'rxjs';
+import { InitService } from '../../services/init.service';
 
 @Injectable({
     providedIn: 'root'
@@ -20,14 +21,24 @@ export class BaseEffects {
     };
     constructor(
         private actions$: Actions,
-        private httpClient: HttpClient
+        private httpClient: HttpClient,
+        private is: InitService,
     ) {}
-    actionName$ = createEffect(() => this.actions$.pipe(
+    initialize$ = createEffect(() => this.actions$.pipe(
         ofType(actions.init),
         mergeMap(() => this.httpClient.get(environment.url + 'initialize', this.httpOptions)),
-        tap(d => console.log(d)),
         map(d => actions.initSuccess({data: d as Init})),
         catchError(err => of(actions.initFail({initFailError: err})))
     ));
-
+    changeLan$ = createEffect(() => this.actions$.pipe(
+        ofType(actions.changeLanguage),
+        mergeMap(action => this.httpClient.get(environment.url + 'initialize', this.httpOptions).pipe(
+            map(data => ({d: data as Init, a: action}))
+        )),
+        map(payload => {
+            payload.d.settings.default_language = payload.a.code;
+            return payload.d;
+        }),
+        map(d => actions.initSuccess({data: d}))
+    ));
 }

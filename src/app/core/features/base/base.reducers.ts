@@ -20,7 +20,7 @@ const reducer = createReducer(
     ),
     on(
         actions.initFail,
-        (state, { initFailError }) => ({ ...state, initFailError })
+        (state, { initFailError }) => ({ ...state })
     ),
 );
 export function baseReducer(state: BaseState | undefined, action: Action) {
