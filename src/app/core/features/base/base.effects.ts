@@ -33,7 +33,11 @@ export class BaseEffects {
     changeLan$ = createEffect(() => this.actions$.pipe(
         ofType(actions.changeLanguage),
         mergeMap(action => this.httpClient.get(environment.url + 'initialize', this.httpOptions).pipe(
-            map(data => ({d: data as Init, a: action}))
+            map(data => {
+                const i: Init = data as Init;
+                i.default_country = this.is.defaultCountry;
+                return {d: i , a: action};
+            })
         )),
         map(payload => {
             payload.d.settings.default_language = payload.a.code;
