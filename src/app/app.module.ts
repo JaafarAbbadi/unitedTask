@@ -15,6 +15,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducers } from './core/features';
 import { BaseEffects } from './core/features/base/base.effects';
 import { PartialsModule } from './partials/partials.module';
+import { IonicStorageModule } from '@ionic/storage';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +28,8 @@ import { PartialsModule } from './partials/partials.module';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([BaseEffects]),
-    PartialsModule
+    PartialsModule,
+    IonicStorageModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
