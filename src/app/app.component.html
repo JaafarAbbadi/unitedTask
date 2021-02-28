@@ -3,32 +3,32 @@
     <ion-menu contentId="main-content" type="overlay">
       <ion-header class="ion-no-margin">
         <ion-toolbar (click)="presentSelectCountry()" color="secondary" class="ion-no-margin">
-          <ion-avatar slot="end"><img [src]="is.logo"></ion-avatar>
-          <ion-title color="primary">{{is.storeName|uppercase}}</ion-title>
+          <ion-avatar slot="end"><img [src]="s.settings?.logo"></ion-avatar>
+          <ion-title color="primary">{{s.settings?.store_name|uppercase}}</ion-title>
         </ion-toolbar>
       </ion-header>
-      <div [ngStyle]="{'background-image':'url('+ is.logo +')','background-size': 'cover','height': '100%'}" >
-        <ion-chip *ngIf="is.defaultLanguage === 'en'" (click)="presentSelectCountry()"><ion-avatar class="ion-margin"><img [src]="is.defaultCountry?.flag"></ion-avatar>{{is.defaultCountry?.title}}</ion-chip>
-        <ion-chip *ngIf="is.defaultLanguage === 'ar'" (click)="presentSelectCountry()"><ion-avatar class="ion-margin"><img [src]="is.defaultCountry?.flag"></ion-avatar>{{is.defaultCountry?.title_ar}}</ion-chip>
+      <div [ngStyle]="{'background-image':'url('+ s.settings?.logo +')','background-size': 'cover','height': '100%'}" >
+        <ion-chip *ngIf="s.settings?.default_language === 'en'" (click)="presentSelectCountry()"><ion-avatar class="ion-margin"><img [src]="s.defaultCountry?.flag"></ion-avatar>{{s.defaultCountry?.title}}</ion-chip>
+        <ion-chip *ngIf="s.settings?.default_language === 'ar'" (click)="presentSelectCountry()"><ion-avatar class="ion-margin"><img [src]="s.defaultCountry?.flag"></ion-avatar>{{s.defaultCountry?.title_ar}}</ion-chip>
         <ion-card>
           <ion-card-content>
             <ion-list>
               <ion-menu-toggle auto-hide="false">
                 <ion-item routerDirection="root" routerLink="/menu" lines="none" detail="false" routerLinkActive="selected">
                   <ion-icon slot="start" ios="menu-outline" md="menu-sharp"></ion-icon>
-                  <ion-label class="ion-text-center">{{ ts.lanPack.menu[is.defaultLanguage]}}</ion-label>
+                  <ion-label class="ion-text-center">{{ ts.lanPack.menu[s.settings?.default_language]}}</ion-label>
                 </ion-item>
                 <ion-item routerDirection="root" routerLink="/order-status" lines="none" detail="false" routerLinkActive="selected">
                   <ion-icon slot="start" ios="cart-outline" md="cart-sharp"></ion-icon>
-                  <ion-label class="ion-text-center">{{ ts.lanPack.orderStatus[is.defaultLanguage]}}</ion-label>
+                  <ion-label class="ion-text-center">{{ ts.lanPack.orderStatus[s.settings?.default_language]}}</ion-label>
                 </ion-item>
                 <ion-item routerDirection="root" routerLink="/about-us" lines="none" detail="false" routerLinkActive="selected">
                   <ion-icon slot="start" ios="information-circle-outline" md="information-circle-sharp"></ion-icon>
-                  <ion-label class="ion-text-center">{{ ts.lanPack.aboutUs[is.defaultLanguage]}}</ion-label>
+                  <ion-label class="ion-text-center">{{ ts.lanPack.aboutUs[s.settings?.default_language]}}</ion-label>
                 </ion-item>
                 <ion-item routerDirection="root" routerLink="/contact-us" lines="none" detail="false" routerLinkActive="selected">
                   <ion-icon slot="start" ios="call-outline" md="call-sharp"></ion-icon>
-                  <ion-label class="ion-text-center">{{ ts.lanPack.contactUs[is.defaultLanguage]}}</ion-label>
+                  <ion-label class="ion-text-center">{{ ts.lanPack.contactUs[s.settings?.default_language]}}</ion-label>
                 </ion-item>
               </ion-menu-toggle>
 
@@ -36,18 +36,18 @@
           </ion-card-content>
         </ion-card>
         <ion-button (click)="presentLogin()" expand="block" class="ion-margin">
-          {{ts.lanPack.login[is.defaultLanguage]}}
+          {{ts.lanPack.login[s.settings?.default_language]}}
         </ion-button>
-        <ion-button *ngIf="is.whatsapp" shape="round" color="primary" class="ion-no-padding" [href]="is.whatsapp">
+        <ion-button *ngIf="s.settings?.whatsapp" shape="round" color="primary" class="ion-no-padding" [href]="s.settings?.whatsapp">
           <ion-icon class="ion-margin"  slot="icon-only" name="logo-whatsapp"></ion-icon>
         </ion-button>
-        <ion-button *ngIf="is.facebook" shape="round" color="primary" class="ion-no-padding" [href]="is.facebook">
+        <ion-button *ngIf="s.settings?.facebook" shape="round" color="primary" class="ion-no-padding" [href]="s.settings?.facebook">
           <ion-icon class="ion-margin"  slot="icon-only" name="logo-facebook"></ion-icon>
         </ion-button>
-        <ion-button *ngIf="is.instagram" shape="round" color="primary" class="ion-no-padding" [href]="is.instagram">
+        <ion-button *ngIf="s.settings?.instagram" shape="round" color="primary" class="ion-no-padding" [href]="s.settings?.instagram">
           <ion-icon class="ion-margin"  slot="icon-only" name="logo-instagram"></ion-icon>
         </ion-button>
-        <ion-button *ngIf="is.twitter" shape="round" color="primary" class="ion-no-padding" [href]="is.twitter">
+        <ion-button *ngIf="s.settings?.twitter" shape="round" color="primary" class="ion-no-padding" [href]="s.settings?.twitter">
           <ion-icon class="ion-margin"  slot="icon-only" name="logo-twitter"></ion-icon>
         </ion-button>
       </div>
@@ -55,7 +55,7 @@
 
       <ion-footer>
         <ion-toolbar color="secondary">
-          <ion-label class="ion-margin-start" color="primary">{{ts.lanPack.disclaimer[is.defaultLanguage]}}</ion-label>
+          <ion-label class="ion-margin-start" color="primary">{{ts.lanPack.disclaimer[s.settings?.default_language]}}</ion-label>
           <ion-button color="primary" slot="end" (click)="changeLanguage('ar')">{{ts.lanPack.arabicButton.ar}}</ion-button>
           <ion-button color="primary" slot="end" (click)="changeLanguage('en')">{{ts.lanPack.englishButton.en}}</ion-button>
         </ion-toolbar>

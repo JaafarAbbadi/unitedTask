@@ -1,13 +1,13 @@
 <ion-content>
     <ion-list>
-      <ion-radio-group (ionChange)="radioChange($event)" name="auto" [value]="is.defaultCountry.country_id">
+      <ion-radio-group (ionChange)="radioChange($event)" name="auto" [value]="s.defaultCountry.country_id">
         <ion-list-header>
-          <ion-label>{{ts.lanPack.countrySelectLabel[is.defaultLanguage]}}</ion-label>
+          <ion-label>{{ts.lanPack.countrySelectLabel[s.settings?.default_language]}}</ion-label>
         </ion-list-header>
-        <ion-item *ngFor="let c of is.countries">
+        <ion-item *ngFor="let c of s.countries">
           <ion-thumbnail slot="start"><img [src]="c.flag"></ion-thumbnail>
-          <ion-label *ngIf="is.defaultLanguage === 'en'">{{c.title}}</ion-label>
-          <ion-label *ngIf="is.defaultLanguage === 'ar'">{{c.title_ar}}</ion-label>
+          <ion-label *ngIf="s.settings?.default_language">{{c.title}}</ion-label>
+          <ion-label *ngIf="s.settings?.default_language === 'ar'">{{c.title_ar}}</ion-label>
           <ion-radio [value]="c.country_id"></ion-radio>
         </ion-item>
       </ion-radio-group>

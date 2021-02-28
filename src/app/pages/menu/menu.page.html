@@ -1,19 +1,19 @@
 <ion-header>
   <ion-toolbar color="primary">
       <ion-menu-button   color="light" slot="start"></ion-menu-button>
-      <ion-searchbar class="ion-text-center" color="light" [placeholder]='ts.lanPack.menu[is.defaultLanguage]'></ion-searchbar>
-      <ion-chip (click)="presentSelectCountry()" slot="end"><ion-avatar class="ion-no-margin"><img [src]='is.defaultCountry?.flag'></ion-avatar></ion-chip>
+      <ion-searchbar class="ion-text-center" color="light" [placeholder]='ts.lanPack.menu[s.settings?.default_language]'></ion-searchbar>
+      <ion-chip (click)="presentSelectCountry()" slot="end"><ion-avatar class="ion-no-margin"><img [src]='s.defaultCountry?.flag'></ion-avatar></ion-chip>
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-  <ion-grid [ngStyle]="{'background-image':'url('+ is.logo +')','background-size': 'cover', 'min-height':'100%'}">
+  <ion-grid [ngStyle]="{'background-image':'url('+ s.settings?.logo +')','background-size': 'cover', 'min-height':'100%'}">
         <ion-card 
           *ngFor="let c of categories" color="light"
           [ngStyle]="{'background-image':'url('+ c.details.image +')','background-size': 'cover', 'max-height':'500px'}"
         >
         <ion-toolbar color="secondary" class="ion-no-margin">
-          <ion-title color="primary" class="ion-text-center" *ngIf="is.defaultLanguage === 'en'" >{{c.details.category_name|uppercase}}</ion-title>
-          <ion-title color="primary" class="ion-text-center" *ngIf="is.defaultLanguage === 'ar'" >{{c.details.category_name_ar}}</ion-title>
+          <ion-title color="primary" class="ion-text-center" *ngIf="s.settings?.default_language" >{{c.details.category_name|uppercase}}</ion-title>
+          <ion-title color="primary" class="ion-text-center" *ngIf="s.settings?.default_language === 'ar'" >{{c.details.category_name_ar}}</ion-title>
           <ion-badge color="secondary" class="ion-margin" slot="end">{{c.details.product_total}}</ion-badge>
         </ion-toolbar>
           <ion-card-content>
@@ -23,16 +23,16 @@
                   <ion-card-header>
                     <img (click)="presentImage(p.main_image)" [src]="p.main_image" style="max-height: 150px;">
                     <ion-item>
-                      <ion-label position="stacked" class="ion-text-center" *ngIf="is.defaultLanguage === 'en'">{{p.title}}</ion-label>
-                      <ion-label position="stacked" class="ion-text-center" *ngIf="is.defaultLanguage === 'ar'">{{p.title_ar}}</ion-label>
-                      <ion-note *ngIf="is.defaultLanguage === 'en'" >{{p.sale_price}} {{is.defaultCountry.currency_title}}</ion-note>
-                      <ion-note slot="start" class="ion-margin-top" *ngIf="is.defaultLanguage === 'ar'">{{p.sale_price}} {{is.defaultCountry.currency_title_ar}}</ion-note>
+                      <ion-label position="stacked" class="ion-text-center" *ngIf="s.settings?.default_language === 'en'">{{p.title}}</ion-label>
+                      <ion-label position="stacked" class="ion-text-center" *ngIf="s.settings?.default_language === 'ar'">{{p.title_ar}}</ion-label>
+                      <ion-note *ngIf="s.settings?.default_language === 'en'" >{{p.sale_price}} {{s.defaultCountry.currency_title}}</ion-note>
+                      <ion-note slot="start" class="ion-margin-top" *ngIf="s.settings?.default_language === 'ar'">{{p.sale_price}} {{s.defaultCountry.currency_title_ar}}</ion-note>
                     </ion-item>
                   </ion-card-header>
                   <ion-card-content>
                     
-                    <ion-text *ngIf="is.defaultLanguage === 'en'">{{p.short_description}}</ion-text>  
-                    <ion-text *ngIf="is.defaultLanguage === 'ar'">{{p.short_description_ar}}</ion-text>
+                    <ion-text *ngIf="s.settings?.default_language === 'en'">{{p.short_description}}</ion-text>  
+                    <ion-text *ngIf="s.settings?.default_language === 'ar'">{{p.short_description_ar}}</ion-text>
                     
                   </ion-card-content>
                 </ion-card>
@@ -46,15 +46,15 @@
   <ion-tab-bar color="primary">
     <ion-tab-button tab="tab1">
       <ion-icon name="bookmark"></ion-icon>
-      <ion-label>{{this.ts.lanPack.booking[is.defaultLanguage]}}</ion-label>
+      <ion-label>{{this.ts.lanPack.booking[s.settings?.default_language]}}</ion-label>
     </ion-tab-button>
     <ion-tab-button tab="tab2">
       <ion-icon name="car"></ion-icon>
-      <ion-label>{{this.ts.lanPack.delivery[is.defaultLanguage]}}</ion-label>
+      <ion-label>{{this.ts.lanPack.delivery[s.settings?.default_language]}}</ion-label>
     </ion-tab-button>
     <ion-tab-button tab="tab3">
       <ion-icon name="bag-handle"></ion-icon>
-      <ion-label>{{this.ts.lanPack.pickup[is.defaultLanguage]}}</ion-label>
+      <ion-label>{{this.ts.lanPack.pickup[s.settings?.default_language]}}</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-footer>

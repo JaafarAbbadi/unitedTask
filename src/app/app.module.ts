@@ -29,7 +29,7 @@ import { IonicStorageModule } from '@ionic/storage';
     StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([BaseEffects]),
     PartialsModule,
-    IonicStorageModule
+    IonicStorageModule.forRoot()
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

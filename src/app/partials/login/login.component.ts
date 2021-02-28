@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EmailValidator, FormControl, FormGroup, Validators } from '@angular/forms';
-import { InitService } from 'src/app/core/services/init.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', Validators.minLength(5))
   });
   constructor(
-    public is: InitService,
+    public s: SettingsService,
     public ts: TranslationService
   ) { }
   onSubmit(val){

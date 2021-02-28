@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as actions from './base.actions';
-import { catchError, map, mergeMap, switchMap, tap} from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, withLatestFrom} from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Init } from '../../models/init.model';
-import { of } from 'rxjs';
-import { InitService } from '../../services/init.service';
+import { Settings, Country, Init } from '../../models/init.model';
+import { forkJoin, from, of } from 'rxjs';
+import { Storage } from '@ionic/storage';
+import { TranslationService } from '../../services/translation.service';
+import { Store } from '@ngrx/store';
+import { countriesSelector, settingsSelector } from './base.selectors';
+
 
 @Injectable({
     providedIn: 'root'
@@ -22,42 +26,71 @@ export class BaseEffects {
     constructor(
         private actions$: Actions,
         private httpClient: HttpClient,
-        private is: InitService,
+        private ts: TranslationService,
+        private storage: Storage,
+        private store: Store
     ) {}
-    initialize$ = createEffect(() => this.actions$.pipe(
-        ofType(actions.init),
-        mergeMap(() => this.httpClient.get(environment.url + 'initialize', this.httpOptions)),
-        map(d => actions.initSuccess({data: d as Init})),
-        catchError(err => of(actions.initFail({initFailError: err})))
+    getLocalStorage$ = createEffect(() => this.actions$.pipe(
+        ofType(actions.getLocalStorage),
+        switchMap(_ => forkJoin<Settings, Country, Country[]>([
+            from(this.storage.get('settings')),
+            from(this.storage.get('defaultCountry')),
+            from(this.storage.get('countries'))
+        ])),
+        map(([s, def, c]) => s && def && c ?
+            actions.getLocalStorageSuccess({settings: s, defaultCountry: def, countries: c})
+            : actions.getSettingsFromServer()
+        ),
+        catchError(err =>
+            of(actions.getLocalStorageFail({getLocalStorageError: err}))
+        )
     ));
-    changeLan$ = createEffect(() => this.actions$.pipe(
+    getSettingsFromServer$ = createEffect(() => this.actions$.pipe(
+        ofType(actions.getSettingsFromServer || actions.getSettingsFromServerFail),
+        mergeMap(() => this.httpClient.get<Init>(environment.url + 'initialize', this.httpOptions)),
+        map(i => actions.getSettingsFromServerSuccess({settings: i.settings, defaultCountry: i.default_country, countries: i.countries})),
+        catchError(err => of(actions.getSettingsFromServerFail({getSettingsFromServer: err})))
+    ));
+    setLocalStorage$ = createEffect(() => this.actions$.pipe(
+        ofType(actions.getSettingsFromServerSuccess),
+        switchMap(a => forkJoin([
+            from(this.storage.set('settings', a.settings)),
+            from(this.storage.set('defaultCountry', a.defaultCountry)),
+            from(this.storage.set('countries', a.countries))
+        ])),
+        map(_ => actions.setLocalStorageSuccess()),
+        catchError(err => of(actions.setLocalStorageFail({setLocalStorageError: err})))
+    ));
+    changeLanguage$ = createEffect(() => this.actions$.pipe(
         ofType(actions.changeLanguage),
-        mergeMap(action => this.httpClient.get(environment.url + 'initialize', this.httpOptions).pipe(
-            map(data => {
-                const i: Init = data as Init;
-                i.default_country = this.is.defaultCountry;
-                return {d: i , a: action};
-            })
-        )),
-        map(payload => {
-            payload.d.settings.default_language = payload.a.code;
-            return payload.d;
+        withLatestFrom(from<Promise<Settings>>(this.storage.get('settings'))),
+        switchMap(([a, s]) => {
+            const settings = Object.assign({}, s);
+            settings.default_language = a.code;
+            return of(settings);
         }),
-        map(d => actions.initSuccess({data: d}))
+        switchMap(s => {
+            if (this.ts.languages.includes(s.default_language)){
+                this.storage.set('settings', s).then();
+                return of(actions.changeLanguageSuccess({settings: s}));
+            }
+            else {
+                return of(actions.changeLanguageFail({changeLanguageError: `${s.default_language} translation is not available`}));
+            }
+        })
     ));
     changeCountry$ = createEffect(() => this.actions$.pipe(
         ofType(actions.changeCountry),
-        mergeMap(action => this.httpClient.get(environment.url + 'initialize', this.httpOptions).pipe(
-            map(data => {
-                const i: Init = data as Init;
-                i.settings.default_language = this.is.defaultLanguage;
-                return {d: i , a: action};
-            })
-        )),
-        map(payload => {
-            payload.d.default_country = payload.d.countries.find(c => c.country_id === payload.a.countryIdentifier);
-            return payload.d;
+        withLatestFrom(this.store.select(countriesSelector)),
+        map(([a, countries]) => countries.find(c => c.country_id === a.countryIdentifier)),
+        map(c => {
+            if (c){
+                this.storage.set('defaultCountry', c).then();
+                return actions.changeCountrySuccess({defaultCountry: c});
+            }
+            else {
+                return actions.changeCountryFail({changeCountryError: 'id is not found'});
+            }
         }),
-        map(d => actions.initSuccess({data: d}))
     ));
 }

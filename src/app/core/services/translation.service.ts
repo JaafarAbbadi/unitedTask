@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class TranslationService {
+  public languages: string[] = ['en', 'ar'];
   public lanPack: {
     menu: {en: string, ar: string},
     pickup: {en: string, ar: string},

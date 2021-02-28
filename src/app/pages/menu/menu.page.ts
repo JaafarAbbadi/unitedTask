@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { selectInitData } from 'src/app/core/features/base/base.selectors';
+import { Subscription } from 'rxjs';
 import { loadCountryProducts } from 'src/app/core/features/menu/menu.actions';
 import { selectProductCountry } from 'src/app/core/features/menu/menu.selectors';
 import { Category, CountryProducts } from 'src/app/core/models/country-products.model';
 import { Init } from 'src/app/core/models/init.model';
-import { InitService } from 'src/app/core/services/init.service';
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
 import { ImageViewComponent } from 'src/app/partials/image-view/image-view.component';
 import { SelectCountryComponent } from 'src/app/partials/select-country/select-country.component';
@@ -27,7 +26,7 @@ export class MenuPage implements OnInit {
   };
 
   constructor(
-    public is: InitService,
+    public s: SettingsService,
     public ts: TranslationService,
     private store: Store,
     private popOverCtrl: PopoverController

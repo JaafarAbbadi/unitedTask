@@ -1,10 +1,10 @@
 import { Component , OnInit} from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { changeLanguage, init } from './core/features/base/base.actions';
-import { Init } from './core/models/init.model';
-import { InitService } from './core/services/init.service';
+import { changeLanguage, getLocalStorage } from './core/features/base/base.actions';
+import { defaultCountrySelector, settingsSelector } from './core/features/base/base.selectors';
+import { Country, Settings } from './core/models/init.model';
+import { SettingsService } from './core/services/settings.service';
 import { TranslationService } from './core/services/translation.service';
 import { LoginComponent } from './partials/login/login.component';
 import { SelectCountryComponent } from './partials/select-country/select-country.component';
@@ -16,21 +16,15 @@ import { SelectCountryComponent } from './partials/select-country/select-country
 export class AppComponent  implements OnInit{
 
   public appPages: {title: string, url: string, icon: string}[];
-  favIcon: HTMLLinkElement = document.querySelector('#appIcon');
-  initData$: Observable<Init>;
   constructor(
-    public is: InitService,
     public ts: TranslationService,
     public store: Store,
-    private popOverCtrl: PopoverController
+    private popOverCtrl: PopoverController,
+    public s: SettingsService
   ) {
-    this.store.dispatch(init());
-    is.initSubscription();
-    // select theme colors
+    this.store.dispatch(getLocalStorage());
   }
-  ngOnInit(){
-    this.favIcon.href = this.is.favicon;
-  }
+  ngOnInit(){}
   changeLanguage(c: string){
     this.store.dispatch(changeLanguage({code: c}));
   }

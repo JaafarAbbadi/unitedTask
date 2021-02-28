@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { InitService } from 'src/app/core/services/init.service';
+import { SettingsService } from 'src/app/core/services/settings.service';
+
 import { TranslationService } from 'src/app/core/services/translation.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 export class OrderStatusPage implements OnInit {
 
   constructor(
-    public is: InitService,
+    public s: SettingsService,
     public ts: TranslationService
   ) { }
 

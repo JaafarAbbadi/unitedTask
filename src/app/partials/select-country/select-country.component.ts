@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { changeCountry } from 'src/app/core/features/base/base.actions';
-import { loadCountryProducts } from 'src/app/core/features/menu/menu.actions';
-import { InitService } from 'src/app/core/services/init.service';
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
 
 @Component({
@@ -15,7 +14,7 @@ export class SelectCountryComponent implements OnInit {
 
   constructor(
     public ts: TranslationService,
-    public is: InitService,
+    public s: SettingsService,
     private popOverCtrl: PopoverController,
     private store: Store
   ) { }
