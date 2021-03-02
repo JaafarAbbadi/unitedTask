@@ -1,6 +1,5 @@
 import { createAction, props } from '@ngrx/store';
 import { CountryProducts } from '../../models/country-products.model';
-import { Init } from '../../models/init.model';
 
 
 export const loadCountryProducts = createAction(
